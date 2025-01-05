@@ -1,0 +1,7 @@
+spring:
+  application:
+    name: 'user-service-api'
+  data:
+    mongodb:
+      uri: 'mongodb://admin:123456@localhost:27020/user-service?authSource=admin'
+      auto-index-creation: true
