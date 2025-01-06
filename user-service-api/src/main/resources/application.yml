@@ -5,3 +5,8 @@ spring:
     mongodb:
       uri: 'mongodb://admin:123456@localhost:27020/user-service?authSource=admin'
       auto-index-creation: true
+springdoc:
+  openapi:
+    title: 'User Service API'
+    description: 'Component responsible for user management created on back end training'
+    version: '1.0.0'
