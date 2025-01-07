@@ -9,4 +9,4 @@ services:
       MONGO_INITDB_ROOT_PASSWORD: 123456
       MONGO_INITDB_DATABASE: user-service
     volumes:
-      - ./data:/data/db
+      - ./.data:/data/db
