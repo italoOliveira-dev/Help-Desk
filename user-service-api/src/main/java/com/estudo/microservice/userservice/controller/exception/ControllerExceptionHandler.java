@@ -4,6 +4,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import models.exceptions.ResourceNotFoundException;
 import models.exceptions.StandardError;
 import models.exceptions.ValidationException;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -51,5 +52,21 @@ public class ControllerExceptionHandler {
                         .build()
         );
 
+    }
+
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<StandardError> handleDataIntegrityViolationException(final DataIntegrityViolationException ex,
+                                                                               final HttpServletRequest request) {
+        HttpStatus status = HttpStatus.CONFLICT;
+
+        return ResponseEntity.status(status).body(
+                StandardError.builder()
+                        .timestamp(LocalDateTime.now())
+                        .status(status.value())
+                        .error(status.getReasonPhrase())
+                        .message(ex.getMessage())
+                        .path(request.getRequestURI())
+                        .build()
+        );
     }
 }
