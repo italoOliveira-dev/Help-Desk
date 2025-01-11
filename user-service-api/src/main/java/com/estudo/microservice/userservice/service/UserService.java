@@ -30,7 +30,7 @@ public class UserService {
         verifyIfEmailAlreadyExists(request.email(), null);
         repository.save(
                 userMapper.fromRequest(request)
-                        .withPassword(passwordEncoder.encode(request.email()))
+                        .withPassword(passwordEncoder.encode(request.password()))
         );
     }
 

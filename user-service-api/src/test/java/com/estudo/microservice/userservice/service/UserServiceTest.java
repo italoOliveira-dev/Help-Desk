@@ -4,6 +4,7 @@ import com.estudo.microservice.userservice.entity.User;
 import com.estudo.microservice.userservice.mapper.UserMapper;
 import com.estudo.microservice.userservice.repository.UserRepository;
 import models.exceptions.ResourceNotFoundException;
+import models.requests.CreateUserRequest;
 import models.responses.UserResponse;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -15,6 +16,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import java.util.List;
 import java.util.Optional;
 
+import static com.estudo.microservice.userservice.creator.CreatorUtils.generateMock;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
@@ -35,7 +37,7 @@ class UserServiceTest {
     @Test
     void findByIdShouldReturnUserResponseWhenIdExists() {
         Mockito.when(userRepository.findById(Mockito.anyString())).thenReturn(Optional.of(new User()));
-        Mockito.when(userMapper.fromEntity(Mockito.any(User.class))).thenReturn(Mockito.mock(UserResponse.class));
+        Mockito.when(userMapper.fromEntity(Mockito.any(User.class))).thenReturn(generateMock(UserResponse.class));
 
         final var response = userService.findById("1");
         assertNotNull(response);
@@ -65,5 +67,21 @@ class UserServiceTest {
 
         Mockito.verify(userRepository, Mockito.times(1)).findAll();
         Mockito.verify(userMapper, Mockito.times(2)).fromEntity(Mockito.any(User.class));
+    }
+
+    @Test
+    void saveShouldSuccessfullySaveUser() {
+        final var request = generateMock(CreateUserRequest.class);
+        Mockito.when(userMapper.fromRequest(request)).thenReturn(new User());
+        Mockito.when(passwordEncoder.encode(request.password())).thenReturn("encoded");
+        Mockito.when(userRepository.save(Mockito.any(User.class))).thenReturn(new User());
+        Mockito.when(userRepository.findByEmail(Mockito.anyString())).thenReturn(Optional.empty());
+
+        userService.save(request);
+
+        Mockito.verify(userMapper).fromRequest(request);
+        Mockito.verify(passwordEncoder).encode(request.password());
+        Mockito.verify(userRepository).save(Mockito.any(User.class));
+        Mockito.verify(userRepository).findByEmail(request.email());
     }
 }
