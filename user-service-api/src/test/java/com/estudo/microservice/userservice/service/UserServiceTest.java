@@ -11,6 +11,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.List;
@@ -83,5 +84,21 @@ class UserServiceTest {
         Mockito.verify(passwordEncoder).encode(request.password());
         Mockito.verify(userRepository).save(Mockito.any(User.class));
         Mockito.verify(userRepository).findByEmail(request.email());
+    }
+
+    @Test
+    void saveShouldThrowDataIntegrityViolationExceptionWhenEmailAlreadyExists() {
+        final var request = generateMock(CreateUserRequest.class);
+        final var entity = generateMock(User.class);
+        Mockito.when(userRepository.findByEmail(Mockito.anyString())).thenReturn(Optional.of(entity));
+
+        assertThrows(DataIntegrityViolationException.class, () -> {
+            userService.save(request);
+        });
+
+        Mockito.verify(userRepository).findByEmail(request.email());
+        Mockito.verify(userMapper, Mockito.times(0)).fromRequest(request);
+        Mockito.verify(passwordEncoder, Mockito.times(0)).encode(request.password());
+        Mockito.verify(userRepository, Mockito.times(0)).save(Mockito.any(User.class));
     }
 }
