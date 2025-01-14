@@ -10,6 +10,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.List;
+
 import static com.estudo.microservice.userservice.creator.CreatorUtils.generateMock;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -52,5 +54,21 @@ class UserControllerImplTest {
                 .andExpect(jsonPath("$.error").value(HttpStatus.NOT_FOUND.getReasonPhrase()))
                 .andExpect(jsonPath("$.message").value("Object not found! Id: 123, Type: User"))
                 .andExpect(jsonPath("$.path").value("/api/users/123"));
+    }
+
+    @Test
+    void findAllShouldReturnIsOk() throws Exception {
+        final var entity1 = generateMock(User.class);
+        final var entity2 = generateMock(User.class);
+
+        userRepository.saveAll(List.of(entity1, entity2));
+
+        mockMvc.perform(get("/api/users"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$").isArray())
+                .andExpect(jsonPath("$.[0]").isNotEmpty())
+                .andExpect(jsonPath("$.[1]").isNotEmpty());
+
+        userRepository.deleteAll(List.of(entity1, entity2));
     }
 }
