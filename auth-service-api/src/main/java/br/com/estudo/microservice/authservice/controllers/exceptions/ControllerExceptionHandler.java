@@ -1,6 +1,7 @@
 package br.com.estudo.microservice.authservice.controllers.exceptions;
 
 import jakarta.servlet.http.HttpServletRequest;
+import models.exceptions.RefreshTokenExpiredException;
 import models.exceptions.StandardError;
 import models.exceptions.ValidationException;
 import org.springframework.http.HttpStatus;
@@ -37,8 +38,8 @@ public class ControllerExceptionHandler {
         return ResponseEntity.badRequest().body(error);
     }
 
-    @ExceptionHandler(BadCredentialsException.class)
-    public ResponseEntity<StandardError> handleResourceNotFoundException(final BadCredentialsException ex,
+    @ExceptionHandler({BadCredentialsException.class, RefreshTokenExpiredException.class})
+    public ResponseEntity<StandardError> handleBadCredentialsException(final RuntimeException ex,
                                                                          final HttpServletRequest request) {
 
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(
