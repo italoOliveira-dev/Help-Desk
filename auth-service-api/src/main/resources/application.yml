@@ -1,10 +1,6 @@
 spring:
   application:
     name: 'auth-service-api'
-  data:
-    mongodb:
-      uri: 'mongodb://admin:123456@localhost:27020/user-service?authSource=admin'
-
-jwt.secret: '70235e9858a363cccf2a7a27febaa902e5c8f8b0c7f255204e23e38934a26d6a4afeae03b1d321d21752a6c014eacd4a5facac378798732c807b35bb8202551f'
-jwt.expiration: 120000
-jwt.expiration-sec.refresh-token: 3600
+  cloud:
+    config:
+      uri: ${CONFIG_SERVER_URI:http://localhost:8888}
