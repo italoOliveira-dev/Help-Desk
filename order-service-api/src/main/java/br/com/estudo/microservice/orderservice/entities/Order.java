@@ -2,10 +2,13 @@ package br.com.estudo.microservice.orderservice.entities;
 
 import jakarta.persistence.*;
 import lombok.*;
+import models.enums.OrderStatusEnum;
 
 import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDateTime;
+
+import static models.enums.OrderStatusEnum.OPEN;
 
 @Entity(name = "tb_orders")
 @Builder
@@ -31,6 +34,10 @@ public class Order implements Serializable {
 
     @Column(nullable = false, length = 3000)
     private String description;
+
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private OrderStatusEnum status = OPEN;
 
     @Column(updatable = false)
     private LocalDateTime createdAt;
