@@ -24,6 +24,8 @@ dependencies {
 //
 //    implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
 
+    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.4'
+
     implementation 'br.com.estudo:hd-commons-lib:1.0.0'
 
     // Lombok
