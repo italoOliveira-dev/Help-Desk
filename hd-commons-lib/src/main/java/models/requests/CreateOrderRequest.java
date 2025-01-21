@@ -17,7 +17,7 @@ public record CreateOrderRequest(@Schema(description = "Request ID", example = "
                                  @Schema(description = "Title of order", example = "Fix my computer")
                                  @NotBlank(message = "The title cannot be null or blank")
                                  @Size(min = 3, max = 50, message = "The title must be between 3 and 50 characters")
-                                 String tile,
+                                 String title,
 
                                  @Schema(description = "Description of order", example = "My computer is broken")
                                  @NotBlank(message = "The description cannot be null or blank")
