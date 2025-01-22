@@ -29,4 +29,9 @@ public class OrderControllerImpl implements OrderController {
     public ResponseEntity<OrderResponse> update(final Long id, UpdateOrderRequest request) {
         return ResponseEntity.ok(orderService.update(id, request));
     }
+
+    @Override
+    public ResponseEntity<OrderResponse> findById(final Long id) {
+        return ResponseEntity.ok(orderService.findById(id));
+    }
 }

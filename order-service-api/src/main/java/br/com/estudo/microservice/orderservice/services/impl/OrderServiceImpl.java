@@ -21,7 +21,7 @@ public class OrderServiceImpl implements OrderService {
     private final OrderRepository orderRepository;
     private final OrderMapper orderMapper;
 
-    public Order findById(final Long id) {
+    private Order getById(final Long id) {
         return orderRepository
                 .findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException(
@@ -35,8 +35,13 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    public OrderResponse findById(final Long id) {
+        return orderMapper.fromEntity(getById(id));
+    }
+
+    @Override
     public OrderResponse update(final Long id, UpdateOrderRequest request) {
-        Order entity = findById(id);
+        Order entity = getById(id);
         Order updated = orderMapper.fromRequest(entity, request);
 
         if (updated.getStatus().equals(OrderStatusEnum.CLOSED)) {

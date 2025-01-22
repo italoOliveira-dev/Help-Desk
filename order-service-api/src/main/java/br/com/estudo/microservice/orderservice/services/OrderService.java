@@ -8,5 +8,7 @@ public interface OrderService {
 
     void save(CreateOrderRequest request);
 
+    OrderResponse findById(final Long id);
+
     OrderResponse update(final Long id, UpdateOrderRequest request);
 }
