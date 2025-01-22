@@ -1,8 +1,12 @@
 package br.com.estudo.microservice.orderservice.services;
 
 import models.requests.CreateOrderRequest;
+import models.requests.UpdateOrderRequest;
+import models.responses.OrderResponse;
 
 public interface OrderService {
 
     void save(CreateOrderRequest request);
+
+    OrderResponse update(final Long id, UpdateOrderRequest request);
 }
