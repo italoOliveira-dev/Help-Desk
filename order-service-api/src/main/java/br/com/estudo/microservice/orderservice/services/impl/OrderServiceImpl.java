@@ -12,6 +12,8 @@ import models.requests.UpdateOrderRequest;
 import models.responses.OrderResponse;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 import static java.time.LocalDateTime.now;
 
 @Service
@@ -39,6 +41,8 @@ public class OrderServiceImpl implements OrderService {
         return orderMapper.fromEntity(getById(id));
     }
 
+
+
     @Override
     public OrderResponse update(final Long id, UpdateOrderRequest request) {
         Order entity = getById(id);
@@ -54,5 +58,10 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public void deleteById(Long id) {
         orderRepository.delete(getById(id));
+    }
+
+    @Override
+    public List<OrderResponse> findAll() {
+        return orderRepository.findAll().stream().map(orderMapper::fromEntity).toList();
     }
 }

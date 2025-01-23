@@ -3,6 +3,7 @@ package br.com.estudo.microservice.orderservice.controllers;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -18,6 +19,8 @@ import models.responses.OrderResponse;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Tag(name = "Order Controller", description = "Controller responsible for orders operations")
 @RequestMapping("/api/orders")
@@ -139,6 +142,20 @@ public interface OrderController {
                                            @NotNull(message = "The order id must be informed")
                                            @PathVariable
                                            final Long id);
+
+    @Operation(description = "Find all orders")
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Orders found",
+                    content = @Content(
+                            mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            array = @ArraySchema(schema = @Schema(implementation = OrderResponse.class))
+                    )
+            )
+    })
+    @GetMapping
+    ResponseEntity<List<OrderResponse>> findAll();
 
     @Operation(description = "Delete order by id")
     @ApiResponses(value = {
