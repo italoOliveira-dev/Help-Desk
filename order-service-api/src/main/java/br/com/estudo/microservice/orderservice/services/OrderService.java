@@ -11,4 +11,6 @@ public interface OrderService {
     OrderResponse findById(final Long id);
 
     OrderResponse update(final Long id, UpdateOrderRequest request);
+
+    void deleteById(Long id);
 }
