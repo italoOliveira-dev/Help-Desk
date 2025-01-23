@@ -1,18 +1,20 @@
 package br.com.estudo.microservice.orderservice.services.impl;
 
+import br.com.estudo.microservice.orderservice.clients.UserServiceFeignClient;
 import br.com.estudo.microservice.orderservice.entities.Order;
 import br.com.estudo.microservice.orderservice.mapper.OrderMapper;
 import br.com.estudo.microservice.orderservice.repositories.OrderRepository;
 import br.com.estudo.microservice.orderservice.services.OrderService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import models.enums.OrderStatusEnum;
 import models.exceptions.ResourceNotFoundException;
 import models.requests.CreateOrderRequest;
 import models.requests.UpdateOrderRequest;
 import models.responses.OrderResponse;
+import models.responses.UserResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,10 +23,12 @@ import static java.time.LocalDateTime.now;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class OrderServiceImpl implements OrderService {
 
     private final OrderRepository orderRepository;
     private final OrderMapper orderMapper;
+    private final UserServiceFeignClient userServiceFeignClient;
 
     private Order getById(final Long id) {
         return orderRepository
@@ -36,7 +40,9 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public void save(CreateOrderRequest request) {
-        orderRepository.save(orderMapper.fromRequest(request));
+        validateUserId(request.requestId());
+        Order entity = orderRepository.save(orderMapper.fromRequest(request));
+        log.info("Order created: {}", entity);
     }
 
     @Override
@@ -71,5 +77,10 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public Page<OrderResponse> findAllPageable(PageRequest pageRequest) {
         return orderRepository.findAll(pageRequest).map(orderMapper::fromEntity);
+    }
+
+    void validateUserId(final String userId) {
+        UserResponse body = userServiceFeignClient.findById(userId).getBody();
+        log.info("User found: {}", body);
     }
 }
