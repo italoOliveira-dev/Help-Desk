@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import models.requests.CreateOrderRequest;
 import models.requests.UpdateOrderRequest;
 import models.responses.OrderResponse;
+import org.springframework.data.domain.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -47,4 +48,12 @@ public class OrderControllerImpl implements OrderController {
         orderService.deleteById(id);
         return ResponseEntity.noContent().build();
     }
+
+    @Override
+    public ResponseEntity<Page<OrderResponse>> findAllPageable(Integer page, Integer size, String sort, String direction) {
+        PageRequest pageRequest = PageRequest.of(page, size, Sort.Direction.valueOf(direction), sort);
+
+        return ResponseEntity.ok(orderService.findAllPageable(pageRequest));
+    }
+
 }

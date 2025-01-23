@@ -3,9 +3,7 @@ package br.com.estudo.microservice.orderservice.controllers;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.media.ArraySchema;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.media.*;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -16,11 +14,16 @@ import models.exceptions.ValidationException;
 import models.requests.CreateOrderRequest;
 import models.requests.UpdateOrderRequest;
 import models.responses.OrderResponse;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+
+import static org.springframework.data.domain.Sort.Direction.ASC;
 
 @Tag(name = "Order Controller", description = "Controller responsible for orders operations")
 @RequestMapping("/api/orders")
@@ -59,7 +62,7 @@ public interface OrderController {
     @PostMapping
     ResponseEntity<Void> save(@Valid @RequestBody CreateOrderRequest request);
 
-    @Operation(description = "Update order")
+    @Operation(summary = "Update order")
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "200",
@@ -102,7 +105,7 @@ public interface OrderController {
                                          @RequestBody
                                          UpdateOrderRequest request);
 
-    @Operation(description = "Find order by id")
+    @Operation(summary = "Find order by id")
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "200",
@@ -143,7 +146,7 @@ public interface OrderController {
                                            @PathVariable
                                            final Long id);
 
-    @Operation(description = "Find all orders")
+    @Operation(summary = "Find all orders")
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "200",
@@ -157,7 +160,7 @@ public interface OrderController {
     @GetMapping
     ResponseEntity<List<OrderResponse>> findAll();
 
-    @Operation(description = "Delete order by id")
+    @Operation(summary = "Delete order by id")
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "204", description = "No content"
@@ -192,4 +195,21 @@ public interface OrderController {
                                     @NotNull(message = "The order id must be informed")
                                     @PathVariable
                                     final Long id);
+
+    @Operation(summary = "Find all orders paged")
+    @GetMapping("/page")
+    ResponseEntity<Page<OrderResponse>> findAllPageable(@RequestParam(value = "page", defaultValue = "0")
+                                                        @Parameter(description = "Number of pages", example = "0", required = true)
+                                                        Integer page,
+                                                        @RequestParam(value = "size", defaultValue = "5")
+                                                        @Parameter(description = "Number of lines per page", example = "5", required = true)
+                                                        Integer size,
+                                                        @RequestParam(value = "sort", required = false)
+                                                        @Parameter(description = "Order by attribute", example = "id", required = true)
+                                                        String sort,
+                                                        @RequestParam(value = "direction", defaultValue = "ASC")
+                                                        @Parameter(description = "Order direction", example = "ASC", required = true)
+                                                        String direction);
+
+
 }

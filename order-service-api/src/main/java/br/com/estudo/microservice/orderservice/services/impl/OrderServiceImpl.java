@@ -10,6 +10,9 @@ import models.exceptions.ResourceNotFoundException;
 import models.requests.CreateOrderRequest;
 import models.requests.UpdateOrderRequest;
 import models.responses.OrderResponse;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -63,5 +66,10 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public List<OrderResponse> findAll() {
         return orderRepository.findAll().stream().map(orderMapper::fromEntity).toList();
+    }
+
+    @Override
+    public Page<OrderResponse> findAllPageable(PageRequest pageRequest) {
+        return orderRepository.findAll(pageRequest).map(orderMapper::fromEntity);
     }
 }
