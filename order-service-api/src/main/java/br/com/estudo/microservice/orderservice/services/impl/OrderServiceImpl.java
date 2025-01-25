@@ -59,6 +59,8 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public OrderResponse update(final Long id, UpdateOrderRequest request) {
+        validateUsers(request);
+
         Order entity = getById(id);
         Order updated = orderMapper.fromRequest(entity, request);
 
@@ -82,6 +84,11 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public Page<OrderResponse> findAllPageable(PageRequest pageRequest) {
         return orderRepository.findAll(pageRequest).map(orderMapper::fromEntity);
+    }
+
+    private void validateUsers(UpdateOrderRequest request) {
+        if (request.requestId() != null) validateUserId(request.requestId());
+        if (request.customerId() != null) validateUserId(request.customerId());
     }
 
     UserResponse validateUserId(final String userId) {
