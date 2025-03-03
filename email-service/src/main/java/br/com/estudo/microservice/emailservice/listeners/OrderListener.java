@@ -1,6 +1,8 @@
 package br.com.estudo.microservice.emailservice.listeners;
 
+import br.com.estudo.microservice.emailservice.models.enums.OperationEnum;
 import br.com.estudo.microservice.emailservice.services.EmailService;
+import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import models.dtos.OrderCreatedMessage;
@@ -22,10 +24,10 @@ public class OrderListener {
             value = @Queue(value = "queue.orders"),
             key = "rk.orders.create"
     ))
-    public void listener(final OrderCreatedMessage message) {
+    public void listener(final OrderCreatedMessage message) throws MessagingException {
         log.info("Ordem de serviço recebida: {}", message);
 
         log.info("Enviando e-mail para o cliente: {}", message.getCustomer().email());
-        emailService.sendMail(message);
+        emailService.sendHtmlMail(message, OperationEnum.ORDER_CREATED);
     }
 }

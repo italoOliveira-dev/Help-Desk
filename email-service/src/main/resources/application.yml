@@ -9,13 +9,3 @@ mail:
   username: ${MAIL_USERNAME:italooliveiraxddtest@gmail.com}
   password: ${MAIL_PASSWORD:sbjy jihe glzb sggu}
   protocol: ${MAIL_PROTOCOL:smtp}
-  text-created-order-confirmation: |
-    Olá %s, sua ordem foi criada com sucesso!
-    
-    Detalhes da ordem:
-    - ID: %s
-    - Título: %s
-    - Descrição: %s
-    - Data de criação: %s
-    - Status: %s
-    - Técnico responsável: %s
