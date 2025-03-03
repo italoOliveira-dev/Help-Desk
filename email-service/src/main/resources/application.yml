@@ -1,11 +1,3 @@
 spring:
   application:
     name: 'email-service'
-server:
-  port: 8085
-mail:
-  host: ${MAIL_HOST:smtp.gmail.com}
-  port: ${MAIL_PORT:587}
-  username: ${MAIL_USERNAME:italooliveiraxddtest@gmail.com}
-  password: ${MAIL_PASSWORD:sbjy jihe glzb sggu}
-  protocol: ${MAIL_PROTOCOL:smtp}
