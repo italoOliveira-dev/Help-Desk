@@ -5,13 +5,13 @@ repositories {
 }
 
 ext {
-    set('springCloudVersion', "2022.0.0")
+    set('springCloudVersion', "2024.0.0")
 }
 
 dependencies {
-    implementation('org.springframework.boot:spring-boot-actuator') {
-        because('Starter para monitoramento e gerenciamento de aplicações Spring Boot')
-    }
+//    implementation('org.springframework.boot:spring-boot-actuator') {
+//        because('Starter para monitoramento e gerenciamento de aplicações Spring Boot')
+//    }
 
     implementation ('org.springframework.boot:spring-boot-starter-web') {
         because('Starter para criar aplicação web, incluindo aplicação RESTful, usando Spring MVC. Usa Tomcat como container padrão.')
@@ -53,7 +53,7 @@ dependencies {
         because('JAXB API')
     }
 
-    implementation ('org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.4') {
+    implementation ('org.springdoc:springdoc-openapi-starter-webmvc-ui') {
         because('Starter para integrar com o SpringDoc OpenAPI e adicionar documentação ao projeto')
     }
 
