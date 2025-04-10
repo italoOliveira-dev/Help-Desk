@@ -15,15 +15,12 @@ import models.requests.CreateOrderRequest;
 import models.requests.UpdateOrderRequest;
 import models.responses.OrderResponse;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-import static org.springframework.data.domain.Sort.Direction.ASC;
 
 @Tag(name = "Order Controller", description = "Controller responsible for orders operations")
 @RequestMapping("/api/orders")
