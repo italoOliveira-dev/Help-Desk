@@ -9,6 +9,9 @@ ext {
 }
 
 dependencies {
+
+    implementation 'org.springframework.boot:spring-boot-actuator'
+
     implementation 'br.com.estudo:hd-commons-lib:1.0.0'
 
     implementation 'org.springframework.boot:spring-boot-starter-web'
