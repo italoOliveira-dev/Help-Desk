@@ -10,25 +10,11 @@ services:
       - ~/.docker-conf/rabbitmq/log/:/var/log/rabbitmq/
     networks:
       - helpdesk
-  config-server:
-    image: italooliveiraxd/helpdesk-config-server
-    container_name: 'config-server'
-    environment:
-      - CONFIG_SERVER_URI=${URL}
-      - CONFIG_SERVER_USERNAME=italoOliveira-dev
-      - CONFIG_SERVER_PASSWORD=${PASSWORD}
-      - PORT=8888
-    ports:
-      - "8888:8888"
-    expose:
-      - 8888
-    networks:
-      - helpdesk
+
   service-discovery:
     image: italooliveiraxd/helpdesk-service-discovery
     container_name: 'service-discovery'
     environment:
-      - CONFIG_SERVER_URI=config-server:8888
       - PORT=8761
     ports:
       - "8761:8761"
@@ -36,10 +22,38 @@ services:
       - 8761
     networks:
       - helpdesk
+
+  api-gateway:
+    image: italooliveiraxd/helpdesk-api-gateway
+    container_name: 'api-gateway'
+    environment:
+      - SERVER_PORT=8765
+      - EUREKA_URI=http://service-discovery:8761/eureka
+    ports:
+      - "8765:8765"
+    expose:
+      - 8765
     depends_on:
-      - config-server
-    links:
-      - config-server
+      - service-discovery
+    networks:
+      - helpdesk
+  config-server:
+    image: italooliveiraxd/helpdesk-config-server
+    container_name: 'config-server'
+    environment:
+      - CONFIG_SERVER_URI=${URI}
+      - CONFIG_SERVER_USERNAME=italoOliveira-dev
+      - CONFIG_SERVER_PASSWORD=${PASSWORD}
+      - EUREKA_URI=http://service-discovery:8761/eureka
+      - PORT=8888
+    ports:
+      - "8888:8888"
+    expose:
+      - 8888
+    depends_on:
+      - service-discovery
+    networks:
+      - helpdesk
 networks:
   helpdesk:
     driver: bridge
