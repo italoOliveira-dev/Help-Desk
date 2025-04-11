@@ -1,13 +1,13 @@
-FROM openjdk:21-jdk-slim AS build
+FROM eclipse-temurin:21-jdk-jammy AS build
 WORKDIR /app
 COPY . .
 RUN ./gradlew build
 
-FROM openjdk:21-jdk-slim
-ARG JAR_FILE=/app/build/libs/*.jar
-RUN useradd -m appuser
+FROM eclipse-temurin:21-jre-jammy
+RUN apt-get update && \
+    apt-get install -y curl && \
+    rm -rf /var/lib/apt/lists/* && \
+    useradd -m appuser
 USER appuser
-COPY --from=build ${JAR_FILE} /app/app.jar
+COPY --from=build /app/build/libs/*.jar /app/app.jar
 ENTRYPOINT ["java", "-jar", "/app/app.jar"]
-
-# docker container run -d -p 8761:8761 --name helpdesk-service-discovery -e CONFIG_SERVER_URI=http://localhost:8888 italooliveiraxd/helpdesk-service-discovery:latest
