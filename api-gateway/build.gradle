@@ -7,7 +7,7 @@ plugins {
 apply from: 'gradle/plugins/dependencies.gradle'
 
 group = 'br.com.estudo.microservice'
-version = '0.0.1-SNAPSHOT'
+version = '1.0.0'
 
 java {
     toolchain {
