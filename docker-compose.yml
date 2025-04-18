@@ -1,4 +1,19 @@
 services:
+
+  mongodb:
+    image: mongo:7.0.5
+    container_name: mongodb
+    ports:
+      - "27020:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGODB_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGODB_PASSWORD}
+      MONGO_INITDB_DATABASE: ${MONGODB_DATABASE}
+    volumes:
+      - ./user-service-api/.data:/data/db
+    networks:
+      - helpdesk
+
   rabbitmq:
     image: rabbitmq:3-management-alpine
     container_name: 'rabbitmq'
@@ -71,6 +86,27 @@ services:
     networks:
       - helpdesk
 
+  auth-service-api:
+    container_name: 'auth-service-api'
+    build:
+      context: ./auth-service-api
+      dockerfile: Dockerfile
+    environment:
+      - CONFIG_SERVER_URI=http://config-server:8888
+      - PROFILE_ACTIVE=dev
+      - EUREKA_URI=http://service-discovery:8761/eureka
+      - SERVER_PORT=8080
+    ports:
+      - '8080:8080'
+    expose:
+      - 8080
+    depends_on:
+      service-discovery:
+        condition: service_healthy
+      config-server:
+        condition: service_healthy
+    networks:
+      - helpdesk
 networks:
   helpdesk:
     name: helpdesk

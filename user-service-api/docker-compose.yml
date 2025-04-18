@@ -10,3 +10,5 @@ services:
       MONGO_INITDB_DATABASE: user-service
     volumes:
       - ./.data:/data/db
+    networks:
+      - helpdesk
