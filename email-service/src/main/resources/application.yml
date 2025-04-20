@@ -1,3 +1,6 @@
 spring:
-  application:
-    name: 'email-service'
+  rabbitmq:
+    port: ${RABBITMQ_PORT}
+    addresses: ${RABBITMQ_ADDRESSES}
+    username: ${RABBITMQ_USERNAME}
+    password: ${RABBITMQ_PASSWORD}
