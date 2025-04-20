@@ -1,0 +1,13 @@
+spring:
+  application:
+    name: 'user-service-api'
+  profiles:
+    active: ${PROFILE_ACTIVE:dev}
+  cloud:
+    config:
+      uri: ${CONFIG_SERVER_URI}
+      fail-fast: true
+      retry:
+        initial-interval: 2000
+        max-interval: 5000
+        max-attempts: 10

@@ -10,7 +10,13 @@ services:
       MONGO_INITDB_ROOT_PASSWORD: ${MONGODB_PASSWORD}
       MONGO_INITDB_DATABASE: ${MONGODB_DATABASE}
     volumes:
-      - ./user-service-api/.data:/data/db
+      - .mongodb_data:/data/db
+    healthcheck:
+      test: [ "CMD", "mongosh", "--eval", "'db.runCommand({ ping: 1 }).ok'" ]
+      interval: 15s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
     networks:
       - helpdesk
 
@@ -140,6 +146,29 @@ services:
         condition: service_healthy
     networks:
       - helpdesk
+
+  user-service-api:
+    container_name: 'user-service-api'
+    build:
+      context: ./user-service-api
+      dockerfile: Dockerfile
+    environment:
+      - PROFILE_ACTIVE=dev
+      - CONFIG_SERVER_URI=http://config-server:8888
+      - EUREKA_URI=http://service-discovery:8761/eureka
+    depends_on:
+      mongodb:
+        condition: service_healthy
+      config-server:
+        condition: service_healthy
+      service-discovery:
+        condition: service_healthy
+    networks:
+      - helpdesk
+
+volumes:
+  mongodb_data:
+    driver: local
 networks:
   helpdesk:
     name: helpdesk
