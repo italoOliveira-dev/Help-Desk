@@ -15,3 +15,5 @@ springdoc:
     title: 'BFF Helpdesk API'
     description: 'Component responsible for aggregating the microservices of the Helpdesk system'
     version: '1.0.0'
+jwt:
+  secret: '70235e9858a363cccf2a7a27febaa902e5c8f8b0c7f255204e23e38934a26d6a4afeae03b1d321d21752a6c014eacd4a5facac378798732c807b35bb8202551f'
