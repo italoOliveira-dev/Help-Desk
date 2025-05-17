@@ -131,11 +131,11 @@ services:
       - CONFIG_SERVER_URI=http://config-server:8888
       - PROFILE_ACTIVE=dev
       - EUREKA_URI=http://service-discovery:8761/eureka
-      - SERVER_PORT=8080
+      - SERVER_PORT=8070
     ports:
-      - '8080:8080'
+      - '8070:8070'
     expose:
-      - 8080
+      - 8070
     depends_on:
       config-server:
         condition: service_healthy
@@ -216,6 +216,29 @@ services:
     networks:
       - helpdesk_db_mysql
       - helpdesk
+
+  helpdesk-bff:
+    container_name: 'helpdesk-bff'
+    build:
+      context: ./helpdesk-bff
+      dockerfile: Dockerfile
+    environment:
+      - PROFILE_ACTIVE=dev
+      - CONFIG_SERVER_URI=http://config-server:8888
+      - EUREKA_URI=http://service-discovery:8761/eureka
+      - SERVER_PORT=8080
+    depends_on:
+      config-server:
+        condition: service_healthy
+      service-discovery:
+        condition: service_healthy
+    ports:
+      - '8080:8080'
+    expose:
+      - 8080
+    networks:
+      - helpdesk
+
 volumes:
   mysql_helpdesk:
     driver: local
