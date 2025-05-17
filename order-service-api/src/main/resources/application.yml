@@ -1,9 +1,4 @@
 spring:
-  application:
-    name: 'order-service-api'
-  cloud:
-    config:
-      uri: 'config-server'
   rabbitmq:
     host: ${RABBITMQ_HOST:localhost}
     port: ${RABBITMQ_PORT:5672}
